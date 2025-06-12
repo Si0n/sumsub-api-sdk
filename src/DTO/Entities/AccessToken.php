@@ -11,7 +11,6 @@ class AccessToken implements BaseEntity
     public function __construct(
         public ?string $token = null,
         public ?string $userId = null,
-        public ?string $expiresAt = null
     ) {
     }
 
@@ -20,7 +19,6 @@ class AccessToken implements BaseEntity
         return new static(
             token: $data['token'] ?? null,
             userId: $data['userId'] ?? null,
-            expiresAt: $data['expiresAt'] ?? null
         );
     }
 }
