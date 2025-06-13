@@ -1,6 +1,22 @@
 # Sumsub PHP SDK
 
-This is a PHP 8.4 SDK for the Sumsub API. It provides a simple interface to interact with Sumsub's verification services.
+A modern PHP 8.4 SDK for the Sumsub API, providing a type-safe interface to interact with Sumsub's verification services.
+
+## Features
+
+- Partial support for Sumsub API endpoints
+- Type-safe DTOs for requests and responses
+- Automatic request signing with HMAC-SHA256
+- PSR-3 compatible logging
+- PHP 8.4 features (typed properties, enums, etc.)
+- Strict type declarations
+- PSR-12 compliant code style
+
+## Requirements
+
+- PHP 8.4 or higher
+- Guzzle 7.0 or higher
+- PSR-3 compatible logger (optional)
 
 ## Installation
 
@@ -11,52 +27,77 @@ composer require sumsub/php-sdk
 ## Usage
 
 ```php
-use Sumsub\ApiClient;
-use Sumsub\DTO\Requests\CreateIndividualApplicant;
-use Sumsub\DTO\Entities\Applicant;
+use SumsubApi\ApiClient;
+use SumsubApi\Configuration;
+use SumsubApi\DTO\Requests\CreateApplicant;
+use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo;
+use SumsubApi\DTO\Entities\Applicant;
 
-// Initialize the client
-$client = new ApiClient(
+// Initialize configuration
+$config = new Configuration(
+    apiUrl: 'https://test-api.sumsub.com',
     appToken: 'your-app-token',
     secretKey: 'your-secret-key'
 );
 
-// Create an applicant
-$request = new CreateIndividualApplicant(
+// Initialize the client
+$client = new ApiClient(
+    config: $config,
+    logger: $logger // Optional PSR-3 logger
+);
+
+// Create an individual applicant
+$request = new CreateApplicant(
+    levelName: 'basic-kyc-level',
     externalUserId: 'user123',
     email: 'john.doe@example.com',
     phone: '+1234567890',
-    fixedInfo: [
-        'country' => 'USA',
-        'placeOfBirth' => 'New York'
-    ]
+    fixedInfo: new ApplicantFixedInfo(
+        country: 'USA',
+        placeOfBirth: 'New York'
+    )
 );
 
-$applicant = $client->createApplicant($request->toArray(), 'basic-kyc-level');
-
-// Get access token
-$accessToken = $client->getAccessToken('user123', 'basic-kyc-level');
-
-// Get applicant status
-$status = $client->getApplicantStatus($applicant['id']);
+$applicant = $client->createApplicant($request);
 
 // Get applicant data
-$data = $client->getApplicantData($applicant['id']);
+$applicantData = $client->getApplicantData($applicant->id);
+
+// Get applicant status
+$status = $client->getApplicantStatus($applicant->id);
+
+// Request access token
+$accessToken = $client->requestAccessToken(
+    new RequestAccessToken(
+        levelName: 'basic-kyc-level',
+        userId: $applicant->externalUserId,
+    )
+);
 ```
 
-## Features
+## Development
 
-- Full support for Sumsub API endpoints
-- Type-safe DTOs for requests and responses
-- Automatic request signing
-- PSR-3 compatible logging
-- PHP 8.4 features (typed properties, enums, etc.)
+The SDK follows PSR-12 coding standards. To ensure code quality, run:
 
-## Requirements
+```bash
+composer require --dev friendsofphp/php-cs-fixer
+vendor/bin/php-cs-fixer fix
+```
 
-- PHP 8.4 or higher
-- Guzzle 7.0 or higher
-- PSR-3 compatible logger (optional)
+## Project Structure
+
+```
+src/
+├── ApiClient.php              # Main API client
+├── Authentication/            # Authentication related classes
+├── Configuration.php          # SDK configuration
+├── DTO/                       # Data Transfer Objects
+│   ├── BaseEntity.php        # Base interface for entities
+│   ├── BaseRequest.php       # Base interface for requests
+│   ├── Entities/             # Response entities
+│   └── Requests/             # Request DTOs
+└── Enums/                    # PHP 8.4 enums
+```
 
 ## License
 
