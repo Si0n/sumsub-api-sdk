@@ -2,6 +2,17 @@
 
 A modern PHP 8.4 SDK for the Sumsub API, providing a type-safe interface to interact with Sumsub's verification services.
 
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+- [Laravel Integration](#laravel-integration)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [License](#license)
+
 ## Features
 
 - Partial support for Sumsub API endpoints
@@ -22,6 +33,57 @@ A modern PHP 8.4 SDK for the Sumsub API, providing a type-safe interface to inte
 
 ```bash
 composer require sumsub/php-sdk
+```
+
+## Basic Usage
+
+```php
+use SumsubApi\ApiClient;
+use SumsubApi\Configuration;
+use SumsubApi\DTO\Requests\CreateApplicant;
+use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo;
+use SumsubApi\DTO\Entities\Applicant;
+
+// Initialize configuration
+$config = new Configuration(
+    apiUrl: 'https://test-api.sumsub.com',
+    appToken: 'your-app-token',
+    secretKey: 'your-secret-key'
+);
+
+// Initialize the client
+$client = new ApiClient(
+    config: $config,
+    logger: $logger // Optional PSR-3 logger
+);
+
+// Create an individual applicant
+$request = new CreateApplicant(
+    levelName: 'basic-kyc-level',
+    externalUserId: 'user123',
+    email: 'john.doe@example.com',
+    phone: '+1234567890',
+    fixedInfo: new ApplicantFixedInfo(
+        country: 'USA',
+        placeOfBirth: 'New York'
+    )
+);
+
+$applicant = $client->createApplicant($request);
+
+// Get applicant data
+$applicantData = $client->getApplicantData($applicant->id);
+
+// Get applicant status
+$status = $client->getApplicantStatus($applicant->id);
+
+// Request access token
+$accessToken = $client->requestAccessToken(
+    new RequestAccessToken(
+        levelName: 'basic-kyc-level',
+        userId: $applicant->externalUserId
+    )
+);
 ```
 
 ## Laravel Integration
@@ -74,57 +136,6 @@ And in your `.env` file:
 SUMSUB_API_URL=https://test-api.sumsub.com
 SUMSUB_APP_TOKEN=your-app-token
 SUMSUB_SECRET_KEY=your-secret-key
-```
-
-## Usage
-
-```php
-use SumsubApi\ApiClient;
-use SumsubApi\Configuration;
-use SumsubApi\DTO\Requests\CreateApplicant;
-use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo;
-use SumsubApi\DTO\Entities\Applicant;
-
-// Initialize configuration
-$config = new Configuration(
-    apiUrl: 'https://test-api.sumsub.com',
-    appToken: 'your-app-token',
-    secretKey: 'your-secret-key'
-);
-
-// Initialize the client
-$client = new ApiClient(
-    config: $config,
-    logger: $logger // Optional PSR-3 logger
-);
-
-// Create an individual applicant
-$request = new CreateApplicant(
-    levelName: 'basic-kyc-level',
-    externalUserId: 'user123',
-    email: 'john.doe@example.com',
-    phone: '+1234567890',
-    fixedInfo: new ApplicantFixedInfo(
-        country: 'USA',
-        placeOfBirth: 'New York'
-    )
-);
-
-$applicant = $client->createApplicant($request);
-
-// Get applicant data
-$applicantData = $client->getApplicantData($applicant->id);
-
-// Get applicant status
-$status = $client->getApplicantStatus($applicant->id);
-
-// Request access token
-$accessToken = $client->requestAccessToken(
-    new RequestAccessToken(
-        levelName: 'basic-kyc-level',
-        userId: $applicant->externalUserId,
-    )
-);
 ```
 
 ## Development
