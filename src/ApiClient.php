@@ -24,6 +24,7 @@ class ApiClient
     private const string PATH_APPLICANT_STATUS = 'resources/applicants/%s/status';
     private const string PATH_APPLICANT_DATA = 'resources/applicants/%s/one';
     private const string PATH_RUN_AML_CHECK = 'resources/applicants/%s/recheck/aml';
+    private const string PATH_REQUEST_APPLICANT_CHECK = 'resources/applicants/%s/status/pending';
 
     protected ?Client $apiClient = null;
 
@@ -89,6 +90,22 @@ class ApiClient
     public function runAmlCheck(string $applicantId): bool
     {
         $response = $this->getApiClient()->post(sprintf(static::PATH_RUN_AML_CHECK, $applicantId));
+        $responseData = json_decode((string) $response->getBody(), true) ?? [];
+
+        return isset($responseData['ok']) && 1 === (int)$responseData['ok'];
+    }
+
+    /**
+     * @param string $applicantId
+     *
+     * @return bool - is the request ok?
+     *
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function requestApplicantCheck(string $applicantId): bool
+    {
+        $response = $this->getApiClient()->post(sprintf(static::PATH_REQUEST_APPLICANT_CHECK, $applicantId));
         $responseData = json_decode((string) $response->getBody(), true) ?? [];
 
         return isset($responseData['ok']) && 1 === (int)$responseData['ok'];
