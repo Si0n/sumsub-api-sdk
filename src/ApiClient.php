@@ -109,6 +109,7 @@ class ApiClient
         $stack->push(new SignRequestMiddleware($this->config));
 
         return $this->apiClient = new Client([
+            ...$this->config->guzzleOptions,
             'base_uri' => $this->config->apiUrl,
             'handler' => $stack,
         ]);
