@@ -28,10 +28,18 @@ class SignRequestMiddleware
 
     protected function createSignature(RequestInterface $request, int $ts): string
     {
-        return hash_hmac(
-            'sha256',
-            $ts . strtoupper($request->getMethod()) . $request->getUri() . $request->getBody(),
-            $this->config->secretKey
-        );
+        $method = strtoupper($request->getMethod());
+        $uri = $request->getUri();
+        $pathUrl = $uri->getPath();
+        $query = $uri->getQuery();
+        if (!empty($query)) {
+            $pathUrl .= '?' . $query;
+        }
+        $body = (string) $request->getBody(); // Guzzle uses streams
+        $bodyBytes = $body !== '' ? $body : '';
+
+        $dataToSign = $ts . $method . $pathUrl . $bodyBytes;
+
+        return hash_hmac('sha256', $dataToSign, $this->config->secretKey);
     }
 }
