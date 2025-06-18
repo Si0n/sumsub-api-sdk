@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SumsubApi\DTO\Entities;
+namespace SumsubApi\DTO\Entities\Parts;
 
-use SumsubApi\DTO\BaseEntity;
+use SumsubApi\DTO\BaseEntityPart;
 
-class ApplicationReviewResult implements BaseEntity
+class ApplicationReviewResult implements BaseEntityPart
 {
     public function __construct(
         public ?string $moderationComment = null,

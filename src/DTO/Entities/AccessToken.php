@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SumsubApi\DTO\Entities;
 
+use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
 
 class AccessToken implements BaseEntity
@@ -15,8 +16,10 @@ class AccessToken implements BaseEntity
     ) {
     }
 
-    public static function fromArray(array $data): static
+    public static function fromResponse(Response $response): static
     {
+        $data = json_decode((string) $response->getBody(), true) ?? [];
+
         return new static(
             token: $data['token'] ?? null,
             userId: $data['userId'] ?? null,

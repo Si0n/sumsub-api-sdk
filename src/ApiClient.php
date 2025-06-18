@@ -14,8 +14,10 @@ use SumsubApi\Authentication\SignRequestMiddleware;
 use SumsubApi\DTO\Entities\AccessToken;
 use SumsubApi\DTO\Entities\Applicant;
 use SumsubApi\DTO\Entities\ApplicationStatus;
+use SumsubApi\DTO\Entities\DeliveredDocument;
 use SumsubApi\DTO\Requests\CreateApplicant;
 use SumsubApi\DTO\Requests\RequestAccessToken;
+use SumsubApi\DTO\Requests\SendApplicationDocument;
 
 class ApiClient
 {
@@ -25,6 +27,7 @@ class ApiClient
     private const string PATH_APPLICANT_DATA = 'resources/applicants/%s/one';
     private const string PATH_RUN_AML_CHECK = 'resources/applicants/%s/recheck/aml';
     private const string PATH_REQUEST_APPLICANT_CHECK = 'resources/applicants/%s/status/pending';
+    private const string PATH_SEND_ID_DOCUMENT = 'resources/applicants/{applicantId}/info/idDoc';
 
     protected ?Client $apiClient = null;
 
@@ -46,7 +49,7 @@ class ApiClient
     {
         $response = $this->getApiClient()->post(static::PATH_APPLICANTS, $request->toGuzzleOptions());
 
-        return Applicant::fromArray(json_decode((string) $response->getBody(), true) ?? []);
+        return Applicant::fromResponse($response);
     }
 
     /**
@@ -61,7 +64,22 @@ class ApiClient
     {
         $response = $this->getApiClient()->get(sprintf(static::PATH_APPLICANT_DATA, $applicantId));
 
-        return Applicant::fromArray(json_decode((string) $response->getBody(), true) ?? []);
+        return Applicant::fromResponse($response);
+    }
+
+    /**
+     * @param string $applicantId
+     *
+     * @return Applicant
+     *
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function sendApplicationDocument(SendApplicationDocument $request): DeliveredDocument
+    {
+        $response = $this->getApiClient()->post(sprintf(static::PATH_APPLICANT_DATA, $request->applicationId), $request->toGuzzleOptions());
+
+        return DeliveredDocument::fromResponse($response);
     }
 
     /**
@@ -76,7 +94,7 @@ class ApiClient
     {
         $response = $this->getApiClient()->get(sprintf(static::PATH_APPLICANT_STATUS, $applicantId));
 
-        return ApplicationStatus::fromArray(json_decode((string) $response->getBody(), true) ?? []);
+        return ApplicationStatus::fromResponse($response);
     }
 
     /**
@@ -122,7 +140,7 @@ class ApiClient
     {
         $response = $this->getApiClient()->post(static::PATH_ACCESS_TOKENS, $request->toGuzzleOptions());
 
-        return AccessToken::fromArray(json_decode((string) $response->getBody(), true) ?? []);
+        return AccessToken::fromResponse($response);
     }
 
 
@@ -131,7 +149,6 @@ class ApiClient
         if ($this->apiClient) {
             return $this->apiClient;
         }
-
         $stack = HandlerStack::create();
 
         if ($this->logger) {

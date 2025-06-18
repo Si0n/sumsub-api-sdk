@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SumsubApi\DTO\Entities;
 
+use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
+use SumsubApi\DTO\Entities\Parts\ApplicationReviewResult;
 use SumsubApi\Enums\ReviewStatus;
 
 class ApplicationStatus implements BaseEntity
@@ -27,8 +29,10 @@ class ApplicationStatus implements BaseEntity
     /**
      * @throws \DateMalformedStringException
      */
-    public static function fromArray(array $data): static
+    public static function fromResponse(Response $response): static
     {
+        $data = json_decode((string) $response->getBody(), true) ?? [];
+
         return new static(
             reviewId: $data['reviewId'] ?? null,
             attemptId: $data['attemptId'] ?? null,
