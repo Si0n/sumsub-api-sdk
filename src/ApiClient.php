@@ -77,7 +77,7 @@ class ApiClient
      */
     public function sendApplicationDocument(SendApplicationDocument $request): DeliveredDocument
     {
-        $response = $this->getApiClient()->post(sprintf(static::PATH_APPLICANT_DATA, $request->applicationId), $request->toGuzzleOptions());
+        $response = $this->getApiClient()->post(sprintf(static::PATH_SEND_ID_DOCUMENT, $request->applicationId), $request->toGuzzleOptions());
 
         return DeliveredDocument::fromResponse($response);
     }
