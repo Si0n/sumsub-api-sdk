@@ -27,7 +27,7 @@ class ApiClient
     private const string PATH_APPLICANT_DATA = 'resources/applicants/%s/one';
     private const string PATH_RUN_AML_CHECK = 'resources/applicants/%s/recheck/aml';
     private const string PATH_REQUEST_APPLICANT_CHECK = 'resources/applicants/%s/status/pending';
-    private const string PATH_SEND_ID_DOCUMENT = 'resources/applicants/{applicantId}/info/idDoc';
+    private const string PATH_SEND_ID_DOCUMENT = 'resources/applicants/%s/info/idDoc';
 
     protected ?Client $apiClient = null;
 
