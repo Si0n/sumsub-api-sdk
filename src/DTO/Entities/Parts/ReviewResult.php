@@ -14,7 +14,7 @@ class ReviewResult implements BaseEntityPart
     public function __construct(
         public ?ReviewAnswer $reviewAnswer = null,
         public ?array $rejectLabels = null,
-        public ?string $reviewRejectType = null,
+        public ?ReviewRejectType $reviewRejectType = null,
         public ?string $clientComment = null,
         public ?string $moderationComment = null,
         public ?array $buttonIds = null,
@@ -33,5 +33,17 @@ class ReviewResult implements BaseEntityPart
             buttonIds: $data['buttonIds'] ?? null,
             rawData: $data,
         );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'reviewAnswer' => $this->reviewAnswer?->value,
+            'rejectLabels' => array_map(fn (RejectionLabel $label) => $label->value, $this->rejectLabels ?? []),
+            'reviewRejectType' => $this->reviewRejectType?->value,
+            'clientComment' => $this->clientComment,
+            'moderationComment' => $this->moderationComment,
+            'buttonIds' => $this->buttonIds,
+        ];
     }
 }
