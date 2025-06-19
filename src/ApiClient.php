@@ -17,6 +17,7 @@ use SumsubApi\DTO\Entities\ApplicationStatus;
 use SumsubApi\DTO\Entities\DeliveredDocument;
 use SumsubApi\DTO\Requests\CreateApplicant;
 use SumsubApi\DTO\Requests\RequestAccessToken;
+use SumsubApi\DTO\Requests\SandboxApplicationComplete;
 use SumsubApi\DTO\Requests\SendApplicationDocument;
 
 class ApiClient
@@ -28,6 +29,7 @@ class ApiClient
     private const string PATH_RUN_AML_CHECK = 'resources/applicants/%s/recheck/aml';
     private const string PATH_REQUEST_APPLICANT_CHECK = 'resources/applicants/%s/status/pending';
     private const string PATH_SEND_ID_DOCUMENT = 'resources/applicants/%s/info/idDoc';
+    private const string PATH_SANDBOX_CHECK_COMPLETE = 'resources/applicants/%s/status/testCompleted';
 
     protected ?Client $apiClient = null;
 
@@ -141,6 +143,21 @@ class ApiClient
         $response = $this->getApiClient()->post(static::PATH_ACCESS_TOKENS, $request->toGuzzleOptions());
 
         return AccessToken::fromResponse($response);
+    }
+
+    /**
+     * @param string $applicantId
+     * @return bool
+     *
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function sandboxApplicationComplete(SandboxApplicationComplete $request): bool
+    {
+        $response = $this->getApiClient()->post(sprintf(static::PATH_SANDBOX_CHECK_COMPLETE, $request->applicantId), $request->toGuzzleOptions());
+        $responseData = json_decode((string) $response->getBody(), true) ?? [];
+
+        return isset($responseData['ok']) && 1 === (int)$responseData['ok'];
     }
 
 
