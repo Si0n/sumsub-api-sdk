@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SumsubApi\DTO\Requests\Parts;
 
 use SumsubApi\DTO\BaseRequestPart;

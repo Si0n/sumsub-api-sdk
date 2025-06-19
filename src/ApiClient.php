@@ -13,8 +13,10 @@ use Psr\Log\LoggerInterface;
 use SumsubApi\Authentication\SignRequestMiddleware;
 use SumsubApi\DTO\Entities\AccessToken;
 use SumsubApi\DTO\Entities\Applicant;
+use SumsubApi\DTO\Entities\ApplicationReviewStatus;
 use SumsubApi\DTO\Entities\ApplicationStatus;
 use SumsubApi\DTO\Entities\DeliveredDocument;
+use SumsubApi\DTO\Entities\RejectionReason;
 use SumsubApi\DTO\Requests\CreateApplicant;
 use SumsubApi\DTO\Requests\RequestAccessToken;
 use SumsubApi\DTO\Requests\SandboxApplicationComplete;
@@ -29,7 +31,9 @@ class ApiClient
     private const string PATH_RUN_AML_CHECK = 'resources/applicants/%s/recheck/aml';
     private const string PATH_REQUEST_APPLICANT_CHECK = 'resources/applicants/%s/status/pending';
     private const string PATH_SEND_ID_DOCUMENT = 'resources/applicants/%s/info/idDoc';
+    private const string PATH_GET_APPLICATION_REVIEW_STATUS = 'resources/applicants/%s/status';
     private const string PATH_SANDBOX_CHECK_COMPLETE = 'resources/applicants/%s/status/testCompleted';
+    private const string PATH_CLARIFY_REJECTION_REASON = 'resources/moderationStates/-;applicantId=%s';
 
     protected ?Client $apiClient = null;
 
@@ -40,10 +44,6 @@ class ApiClient
     }
 
     /**
-     * @param CreateApplicant $request
-     *
-     * @return Applicant
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */
@@ -55,10 +55,6 @@ class ApiClient
     }
 
     /**
-     * @param string $applicantId
-     *
-     * @return Applicant
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */
@@ -70,9 +66,28 @@ class ApiClient
     }
 
     /**
-     * @param string $applicantId
-     *
-     * @return Applicant
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function getApplicationReviewStatus(string $applicantId): ApplicationReviewStatus
+    {
+        $response = $this->getApiClient()->get(sprintf(static::PATH_GET_APPLICATION_REVIEW_STATUS, $applicantId));
+
+        return ApplicationReviewStatus::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function clarifyRejectionReason(string $applicantId): RejectionReason
+    {
+        $response = $this->getApiClient()->get(sprintf(static::PATH_CLARIFY_REJECTION_REASON, $applicantId));
+
+        return RejectionReason::fromResponse($response);
+    }
+
+    /**
      *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
@@ -85,10 +100,6 @@ class ApiClient
     }
 
     /**
-     * @param string $applicantId
-     *
-     * @return ApplicationStatus
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */
@@ -100,10 +111,6 @@ class ApiClient
     }
 
     /**
-     * @param string $applicantId
-     *
-     * @return bool - is the request ok?
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */
@@ -116,10 +123,6 @@ class ApiClient
     }
 
     /**
-     * @param string $applicantId
-     *
-     * @return bool - is the request ok?
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */
@@ -132,9 +135,6 @@ class ApiClient
     }
 
     /**
-     * @param string $applicantId
-     * @return Applicant
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */
@@ -146,9 +146,6 @@ class ApiClient
     }
 
     /**
-     * @param string $applicantId
-     * @return bool
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */

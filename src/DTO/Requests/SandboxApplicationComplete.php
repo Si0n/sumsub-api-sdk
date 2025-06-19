@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SumsubApi\DTO\Requests;
 
 use GuzzleHttp\RequestOptions;
 use SumsubApi\DTO\BaseRequest;
-use SumsubApi\DTO\Requests\Parts\ApplicantIdentifiers;
 use SumsubApi\Enums\RejectionLabel;
 use SumsubApi\Enums\ReviewAnswer;
 use SumsubApi\Enums\ReviewRejectType;
