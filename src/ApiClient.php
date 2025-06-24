@@ -16,8 +16,10 @@ use SumsubApi\DTO\Entities\Applicant;
 use SumsubApi\DTO\Entities\ApplicationReviewStatus;
 use SumsubApi\DTO\Entities\ApplicationStatus;
 use SumsubApi\DTO\Entities\DeliveredDocument;
+use SumsubApi\DTO\Entities\ExternalWebSDKLink;
 use SumsubApi\DTO\Entities\RejectionReason;
 use SumsubApi\DTO\Requests\CreateApplicant;
+use SumsubApi\DTO\Requests\GenerateExternalWebSDKLink;
 use SumsubApi\DTO\Requests\RequestAccessToken;
 use SumsubApi\DTO\Requests\SandboxApplicationComplete;
 use SumsubApi\DTO\Requests\SendApplicationDocument;
@@ -34,6 +36,7 @@ class ApiClient
     private const string PATH_GET_APPLICATION_REVIEW_STATUS = 'resources/applicants/%s/status';
     private const string PATH_SANDBOX_CHECK_COMPLETE = 'resources/applicants/%s/status/testCompleted';
     private const string PATH_CLARIFY_REJECTION_REASON = 'resources/moderationStates/-;applicantId=%s';
+    private const string PATH_GENERATE_EXTERNAL_WEBSDK_LINK = 'resources/sdkIntegrations/levels/-/websdkLink';
 
     protected ?Client $apiClient = null;
 
@@ -52,6 +55,17 @@ class ApiClient
         $response = $this->getApiClient()->post(static::PATH_APPLICANTS, $request->toGuzzleOptions());
 
         return Applicant::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function generateExternalWebSDKLink(GenerateExternalWebSDKLink $request): ExternalWebSDKLink
+    {
+        $response = $this->getApiClient()->post(static::PATH_GENERATE_EXTERNAL_WEBSDK_LINK, $request->toGuzzleOptions());
+
+        return ExternalWebSDKLink::fromResponse($response);
     }
 
     /**
