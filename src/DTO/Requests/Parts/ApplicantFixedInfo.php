@@ -39,7 +39,7 @@ readonly class ApplicantFixedInfo implements BaseRequestPart
             'middleName' => $this->middleName,
             'lastName' => $this->lastName,
             'legalName' => $this->legalName,
-            'gender' => $this->gender->value,
+            'gender' => $this->gender?->value,
             'dob' => $this->dob?->format('Y-m-d'),
             'placeOfBirth' => $this->placeOfBirth,
             'countryOfBirth' => $this->countryOfBirth,
