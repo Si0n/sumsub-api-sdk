@@ -10,21 +10,7 @@ use SumsubApi\Enums\Gender;
 readonly class ApplicantFixedInfo implements BaseRequestPart
 {
     /**
-     * @param ApplicantCompanyInfo|null $companyInfo
-     * @param string|null $firstName
-     * @param string|null $middleName
-     * @param string|null $lastName
-     * @param string|null $legalName
-     * @param Gender|null $gender
-     * @param \DateTimeInterface|null $dob
-     * @param string|null $placeOfBirth
-     * @param string|null $countryOfBirth
-     * @param string|null $stateOfBirth
-     * @param string|null $country
-     * @param string|null $nationality
      * @param ComplexAddress[]|null $addresses
-     * @param string|null $tin
-     * @param string|null $taxResidenceCountry
      */
     public function __construct(
         public ?ApplicantCompanyInfo $companyInfo = null,

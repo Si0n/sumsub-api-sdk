@@ -9,7 +9,7 @@ use SumsubApi\DTO\BaseRequestPart;
 readonly class ApplicantCompanyInfo implements BaseRequestPart
 {
     /**
-     * @param ?bool $noUBOs When set to true, a company is to be verified with no UBOs specified in the company profile. For example, in case when another legal entity that cannot be a UBO owns this company.
+     * @param ?bool $noUBOs         When set to true, a company is to be verified with no UBOs specified in the company profile. For example, in case when another legal entity that cannot be a UBO owns this company.
      * @param ?bool $noShareholders When set to true, a company is to be verified with no shareholders specified in the company profile. For example, in case when the verification level settings require a company to have three shareholders but the company has just one.
      */
     public function __construct(
@@ -52,7 +52,7 @@ readonly class ApplicantCompanyInfo implements BaseRequestPart
             'website' => $this->website,
             'postalAddress' => $this->postalAddress,
             'noUBOs' => $this->noUBOs,
-            'noShareholders' => $this->noShareholders
+            'noShareholders' => $this->noShareholders,
         ];
     }
 }

@@ -7,18 +7,20 @@ namespace SumsubApi;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use Psr\Log\LoggerInterface;
 use SumsubApi\Authentication\SignRequestMiddleware;
 use SumsubApi\DTO\Entities\AccessToken;
 use SumsubApi\DTO\Entities\Applicant;
+use SumsubApi\DTO\Entities\ApplicantAction;
 use SumsubApi\DTO\Entities\ApplicationReviewStatus;
 use SumsubApi\DTO\Entities\ApplicationStatus;
 use SumsubApi\DTO\Entities\DeliveredDocument;
 use SumsubApi\DTO\Entities\ExternalWebSDKLink;
 use SumsubApi\DTO\Entities\RejectionReason;
 use SumsubApi\DTO\Requests\CreateApplicant;
+use SumsubApi\DTO\Requests\CreateApplicantAction;
 use SumsubApi\DTO\Requests\GenerateExternalWebSDKLink;
 use SumsubApi\DTO\Requests\RequestAccessToken;
 use SumsubApi\DTO\Requests\SandboxApplicationComplete;
@@ -27,6 +29,8 @@ use SumsubApi\DTO\Requests\SendApplicationDocument;
 class ApiClient
 {
     private const string PATH_APPLICANTS = 'resources/applicants';
+    private const string PATH_CREATE_APPLICANT_ACTION = 'resources/applicantActions/-/forApplicant/%s';
+    private const string PATH_REQUEST_ACTION_CHECK = 'resources/applicantActions/%s/review/status/pending';
     private const string PATH_ACCESS_TOKENS = 'resources/accessTokens/sdk';
     private const string PATH_APPLICANT_STATUS = 'resources/applicants/%s/status';
     private const string PATH_APPLICANT_DATA = 'resources/applicants/%s/one';
@@ -55,6 +59,28 @@ class ApiClient
         $response = $this->getApiClient()->post(static::PATH_APPLICANTS, $request->toGuzzleOptions());
 
         return Applicant::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function createApplicantAction(CreateApplicantAction $request): ApplicantAction
+    {
+        $response = $this->getApiClient()->post(sprintf(static::PATH_CREATE_APPLICANT_ACTION, $request->applicantId), $request->toGuzzleOptions());
+
+        return ApplicantAction::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function requestActionCheck(string $actionId): ApplicantAction
+    {
+        $response = $this->getApiClient()->post(sprintf(static::PATH_REQUEST_ACTION_CHECK, $actionId));
+
+        return ApplicantAction::fromResponse($response);
     }
 
     /**
@@ -102,7 +128,6 @@ class ApiClient
     }
 
     /**
-     *
      * @throws GuzzleException
      * @throws \DateMalformedStringException
      */
@@ -133,7 +158,7 @@ class ApiClient
         $response = $this->getApiClient()->post(sprintf(static::PATH_RUN_AML_CHECK, $applicantId));
         $responseData = json_decode((string) $response->getBody(), true) ?? [];
 
-        return isset($responseData['ok']) && 1 === (int)$responseData['ok'];
+        return isset($responseData['ok']) && 1 === (int) $responseData['ok'];
     }
 
     /**
@@ -145,7 +170,7 @@ class ApiClient
         $response = $this->getApiClient()->post(sprintf(static::PATH_REQUEST_APPLICANT_CHECK, $applicantId));
         $responseData = json_decode((string) $response->getBody(), true) ?? [];
 
-        return isset($responseData['ok']) && 1 === (int)$responseData['ok'];
+        return isset($responseData['ok']) && 1 === (int) $responseData['ok'];
     }
 
     /**
@@ -168,9 +193,8 @@ class ApiClient
         $response = $this->getApiClient()->post(sprintf(static::PATH_SANDBOX_CHECK_COMPLETE, $request->applicantId), $request->toGuzzleOptions());
         $responseData = json_decode((string) $response->getBody(), true) ?? [];
 
-        return isset($responseData['ok']) && 1 === (int)$responseData['ok'];
+        return isset($responseData['ok']) && 1 === (int) $responseData['ok'];
     }
-
 
     public function getApiClient(): Client
     {

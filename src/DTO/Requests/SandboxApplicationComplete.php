@@ -27,12 +27,11 @@ class SandboxApplicationComplete implements BaseRequest
         }
         $isFinal = ReviewRejectType::FINAL === $this->reviewRejectType;
 
-        $this->rejectLabels = array_filter($this->rejectLabels, fn (RejectionLabel $label) => match($isFinal) {
+        $this->rejectLabels = array_filter($this->rejectLabels, fn (RejectionLabel $label) => match ($isFinal) {
             true => $label->isFinal(),
             false => !$label->isFinal(),
         });
     }
-
 
     public function toGuzzleOptions(): array
     {

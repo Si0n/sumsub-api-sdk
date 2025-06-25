@@ -6,10 +6,11 @@ namespace SumsubApi\DTO\Entities;
 
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
+use SumsubApi\DTO\BaseEntityPart;
 use SumsubApi\DTO\Entities\Parts\ReviewResult;
 use SumsubApi\Enums\ReviewStatus;
 
-class ApplicationReviewStatus implements BaseEntity
+class ApplicationReviewStatus implements BaseEntity, BaseEntityPart
 {
     public function __construct(
         public ?string $reviewId = null,
@@ -32,6 +33,14 @@ class ApplicationReviewStatus implements BaseEntity
     {
         $data = json_decode((string) $response->getBody(), true) ?? [];
 
+        return static::fromArray($data);
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function fromArray(array $data): static
+    {
         return new static(
             reviewId: $data['reviewId'] ?? null,
             levelName: $data['levelName'] ?? null,

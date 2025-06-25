@@ -19,7 +19,6 @@ readonly class RequestAccessToken implements BaseRequest
     ) {
     }
 
-
     public function toGuzzleOptions(): array
     {
         return [

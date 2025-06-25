@@ -36,7 +36,7 @@ class SignRequestMiddleware
             $pathUrl .= '?' . $query;
         }
         $body = (string) $request->getBody(); // Guzzle uses streams
-        $bodyBytes = $body !== '' ? $body : '';
+        $bodyBytes = '' !== $body ? $body : '';
 
         $dataToSign = $ts . $method . $pathUrl . $bodyBytes;
 
