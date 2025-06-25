@@ -30,7 +30,7 @@ class DeliveredDocument
 
         return new self(
             imageId: $response->getHeaderLine('X-Image-Id'),
-            idDocType: $data['idDocType'] ? DocumentType::tryFrom($data['idDocType']) : null,
+            idDocType: !empty($data['idDocType']) ? DocumentType::tryFrom($data['idDocType']) : null,
             country: $data['country'] ?? null,
             issuedDate: isset($data['issuedDate']) ? new \DateTimeImmutable($data['issuedDate']) : null,
             number: $data['number'] ?? null,
