@@ -41,7 +41,7 @@ class ApplicationReviewStatus implements BaseEntity
             createDate: isset($data['createDate']) ? new \DateTimeImmutable($data['createDate']) : null,
             reviewDate: isset($data['reviewDate']) ? new \DateTimeImmutable($data['reviewDate']) : null,
             reviewResult: ReviewResult::fromArray($data['reviewResult'] ?? []),
-            reviewStatus: ReviewStatus::tryFrom($data['reviewStatus'] ?? []),
+            reviewStatus: $data['reviewStatus'] ? ReviewStatus::tryFrom($data['reviewStatus']) : null,
             rawData: $data,
         );
     }

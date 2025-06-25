@@ -25,9 +25,9 @@ class ReviewResult implements BaseEntityPart
     public static function fromArray(array $data): static
     {
         return new static(
-            reviewAnswer: ReviewAnswer::tryFrom($data['reviewAnswer'] ?? null),
+            reviewAnswer: $data['reviewAnswer'] ? ReviewAnswer::tryFrom($data['reviewAnswer']) : null,
             rejectLabels: array_map(RejectionLabel::tryFrom(...), $data['rejectLabels'] ?? []),
-            reviewRejectType: ReviewRejectType::tryFrom($data['reviewRejectType'] ?? null),
+            reviewRejectType: $data['reviewRejectType'] ? ReviewRejectType::tryFrom($data['reviewRejectType']) : null,
             clientComment: $data['clientComment'] ?? null,
             moderationComment: $data['moderationComment'] ?? null,
             buttonIds: $data['buttonIds'] ?? null,
