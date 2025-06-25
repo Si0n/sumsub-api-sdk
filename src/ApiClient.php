@@ -18,7 +18,9 @@ use SumsubApi\DTO\Entities\ApplicationReviewStatus;
 use SumsubApi\DTO\Entities\ApplicationStatus;
 use SumsubApi\DTO\Entities\DeliveredDocument;
 use SumsubApi\DTO\Entities\ExternalWebSDKLink;
+use SumsubApi\DTO\Entities\Parts\ApplicantFixedInfo;
 use SumsubApi\DTO\Entities\RejectionReason;
+use SumsubApi\DTO\Requests\ChangeApplicantFixedInfo;
 use SumsubApi\DTO\Requests\CreateApplicant;
 use SumsubApi\DTO\Requests\CreateApplicantAction;
 use SumsubApi\DTO\Requests\GenerateExternalWebSDKLink;
@@ -29,6 +31,7 @@ use SumsubApi\DTO\Requests\SendApplicationDocument;
 class ApiClient
 {
     private const string PATH_APPLICANTS = 'resources/applicants';
+    private const string PATH_CHANGE_APPLICANT_FIXED_INFO = 'resources/applicants/%s/fixedInfo';
     private const string PATH_CREATE_APPLICANT_ACTION = 'resources/applicantActions/-/forApplicant/%s';
     private const string PATH_REQUEST_ACTION_CHECK = 'resources/applicantActions/%s/review/status/pending';
     private const string PATH_ACCESS_TOKENS = 'resources/accessTokens/sdk';
@@ -59,6 +62,17 @@ class ApiClient
         $response = $this->getApiClient()->post(static::PATH_APPLICANTS, $request->toGuzzleOptions());
 
         return Applicant::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function changeApplicantFixedInfo(ChangeApplicantFixedInfo $request): ApplicantFixedInfo
+    {
+        $response = $this->getApiClient()->patch(sprintf(static::PATH_CHANGE_APPLICANT_FIXED_INFO, $request->applicantId), $request->toGuzzleOptions());
+
+        return ApplicantFixedInfo::fromResponse($response);
     }
 
     /**
