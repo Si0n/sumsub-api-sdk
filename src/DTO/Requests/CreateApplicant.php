@@ -6,6 +6,7 @@ namespace SumsubApi\DTO\Requests;
 
 use GuzzleHttp\RequestOptions;
 use SumsubApi\DTO\BaseRequest;
+use SumsubApi\DTO\Requests\Parts\ApplicantCompanyInfo;
 use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo;
 use SumsubApi\Enums\CompanyType;
 
@@ -33,6 +34,42 @@ readonly class CreateApplicant implements BaseRequest
         public ?ApplicantFixedInfo $info = null,
         public array $metadata = [],
     ) {
+    }
+
+    public static function individualApplicant(
+        string $levelName,
+        string $externalUserId,
+        ?string $email,
+        ?string $phone,
+        ApplicantFixedInfo $fixedInfo,
+        array $metadata = []
+    ): self {
+        return new self(
+            levelName: $levelName,
+            externalUserId: $externalUserId,
+            email: $email,
+            phone: $phone,
+            type: CompanyType::INDIVIDUAL,
+            fixedInfo: $fixedInfo,
+            metadata: $metadata
+        );
+    }
+
+    public static function companyApplicant(
+        string $levelName,
+        string $externalUserId,
+        ApplicantCompanyInfo $companyInfo,
+        array $metadata = []
+    ): self {
+        return new self(
+            levelName: $levelName,
+            externalUserId: $externalUserId,
+            type: CompanyType::COMPANY,
+            fixedInfo: new ApplicantFixedInfo(
+                companyInfo: $companyInfo
+            ),
+            metadata: $metadata
+        );
     }
 
     public function toGuzzleOptions(): array
