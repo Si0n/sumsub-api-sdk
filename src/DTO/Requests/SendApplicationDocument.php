@@ -52,7 +52,7 @@ readonly class SendApplicationDocument implements BaseRequest
                     ])),
                 ],
                 [
-                    'name' => 'file',
+                    'name' => 'content',
                     'contents' => Utils::streamFor($this->file),
                     'filename' => $this->fileName,
                 ],
