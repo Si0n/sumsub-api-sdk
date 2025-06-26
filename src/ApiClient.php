@@ -44,6 +44,7 @@ class ApiClient
     private const string PATH_SANDBOX_CHECK_COMPLETE = 'resources/applicants/%s/status/testCompleted';
     private const string PATH_CLARIFY_REJECTION_REASON = 'resources/moderationStates/-;applicantId=%s';
     private const string PATH_GENERATE_EXTERNAL_WEBSDK_LINK = 'resources/sdkIntegrations/levels/-/websdkLink';
+    private const string PATH_GENERATE_REPORT = 'resources/applicants/%s/summary/report?lang=en&report=applicantReport&waitForId=report-ready';
 
     protected ?Client $apiClient = null;
 
@@ -106,6 +107,17 @@ class ApiClient
         $response = $this->getApiClient()->post(static::PATH_GENERATE_EXTERNAL_WEBSDK_LINK, $request->toGuzzleOptions());
 
         return ExternalWebSDKLink::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function generateApplicantReport(string $applicationId): string
+    {
+        $response = $this->getApiClient()->get(sprintf(static::PATH_GENERATE_REPORT, $applicationId));
+
+        return (string) $response->getBody();
     }
 
     /**
