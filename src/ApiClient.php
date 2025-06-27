@@ -37,6 +37,7 @@ class ApiClient
     private const string PATH_ACCESS_TOKENS = 'resources/accessTokens/sdk';
     private const string PATH_APPLICANT_STATUS = 'resources/applicants/%s/status';
     private const string PATH_APPLICANT_DATA = 'resources/applicants/%s/one';
+    private const string PATH_APPLICANT_DATA_BY_EXTERNAL_USER_ID = 'resources/applicants/-;externalUserId=%s/one';
     private const string PATH_RUN_AML_CHECK = 'resources/applicants/%s/recheck/aml';
     private const string PATH_REQUEST_APPLICANT_CHECK = 'resources/applicants/%s/status/pending';
     private const string PATH_SEND_ID_DOCUMENT = 'resources/applicants/%s/info/idDoc';
@@ -127,6 +128,17 @@ class ApiClient
     public function getApplicantData(string $applicantId): Applicant
     {
         $response = $this->getApiClient()->get(sprintf(static::PATH_APPLICANT_DATA, $applicantId));
+
+        return Applicant::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function getApplicantDataByExternalUserId(int | string $externalUserId): Applicant
+    {
+        $response = $this->getApiClient()->get(sprintf(static::PATH_APPLICANT_DATA_BY_EXTERNAL_USER_ID, $externalUserId));
 
         return Applicant::fromResponse($response);
     }
