@@ -18,7 +18,7 @@ use SumsubApi\DTO\Entities\ApplicationReviewStatus;
 use SumsubApi\DTO\Entities\ApplicationStatus;
 use SumsubApi\DTO\Entities\DeliveredDocument;
 use SumsubApi\DTO\Entities\ExternalWebSDKLink;
-use SumsubApi\DTO\Entities\Parts\ApplicantFixedInfo;
+use SumsubApi\DTO\Parts\ApplicantFixedInfo;
 use SumsubApi\DTO\Entities\RejectionReason;
 use SumsubApi\DTO\Requests\ChangeApplicantFixedInfo;
 use SumsubApi\DTO\Requests\CreateApplicant;

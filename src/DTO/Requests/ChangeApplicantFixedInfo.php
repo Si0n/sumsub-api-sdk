@@ -6,7 +6,7 @@ namespace SumsubApi\DTO\Requests;
 
 use GuzzleHttp\RequestOptions;
 use SumsubApi\DTO\BaseRequest;
-use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo;
+use SumsubApi\DTO\Parts\ApplicantFixedInfo;
 use SumsubApi\Enums\Gender;
 
 readonly class ChangeApplicantFixedInfo extends ApplicantFixedInfo implements BaseRequest

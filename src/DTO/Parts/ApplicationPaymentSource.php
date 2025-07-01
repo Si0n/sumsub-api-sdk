@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SumsubApi\DTO\Entities\Parts;
+namespace SumsubApi\DTO\Parts;
 
 use SumsubApi\DTO\BaseEntityPart;
 
-class PaymentSource implements BaseEntityPart
+class ApplicationPaymentSource implements BaseEntityPart
 {
     public function __construct(
         public ?string $id = null,

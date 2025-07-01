@@ -7,7 +7,7 @@ namespace SumsubApi\DTO\Entities;
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
 use SumsubApi\DTO\BaseEntityPart;
-use SumsubApi\DTO\Entities\Parts\ApplicantFixedInfo;
+use SumsubApi\DTO\Parts\ApplicantFixedInfo;
 use SumsubApi\Enums\CompanyType;
 
 class Applicant implements BaseEntity, BaseEntityPart

@@ -6,7 +6,7 @@ namespace SumsubApi\DTO\Entities;
 
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
-use SumsubApi\DTO\Entities\Parts\ApplicationReviewResult;
+use SumsubApi\DTO\Parts\ApplicationReviewResult;
 use SumsubApi\Enums\ReviewStatus;
 
 class ApplicationStatus implements BaseEntity

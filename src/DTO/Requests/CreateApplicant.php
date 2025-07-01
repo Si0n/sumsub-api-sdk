@@ -6,8 +6,8 @@ namespace SumsubApi\DTO\Requests;
 
 use GuzzleHttp\RequestOptions;
 use SumsubApi\DTO\BaseRequest;
-use SumsubApi\DTO\Requests\Parts\ApplicantCompanyInfo;
-use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo;
+use SumsubApi\DTO\Parts\ApplicantCompanyInfo;
+use SumsubApi\DTO\Parts\ApplicantFixedInfo;
 use SumsubApi\Enums\CompanyType;
 
 readonly class CreateApplicant implements BaseRequest

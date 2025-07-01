@@ -6,7 +6,7 @@ namespace SumsubApi\DTO\Requests;
 
 use GuzzleHttp\RequestOptions;
 use SumsubApi\DTO\BaseRequest;
-use SumsubApi\DTO\Requests\Parts\ApplicantIdentifiers;
+use SumsubApi\DTO\Parts\ApplicantIdentifiers;
 
 readonly class GenerateExternalWebSDKLink implements BaseRequest
 {

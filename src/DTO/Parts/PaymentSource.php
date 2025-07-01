@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SumsubApi\DTO\Requests\Parts;
+namespace SumsubApi\DTO\Parts;
 
 use SumsubApi\DTO\BaseRequestPart;
 use SumsubApi\Enums\PaymentSourceType;

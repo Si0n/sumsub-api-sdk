@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SumsubApi\DTO\Requests\Parts;
+namespace SumsubApi\DTO\Parts;
 
+use GuzzleHttp\Psr7\Response;
+use SumsubApi\DTO\BaseEntity;
+use SumsubApi\DTO\BaseEntityPart;
 use SumsubApi\DTO\BaseRequestPart;
 use SumsubApi\Enums\Gender;
 
-readonly class ApplicantFixedInfo implements BaseRequestPart
+readonly class ApplicantFixedInfo implements BaseRequestPart, BaseEntityPart, BaseEntity
 {
     /**
      * @param ComplexAddress[]|null $addresses
@@ -50,5 +53,38 @@ readonly class ApplicantFixedInfo implements BaseRequestPart
             'tin' => $this->tin,
             'taxResidenceCountry' => $this->taxResidenceCountry,
         ];
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function fromResponse(Response $response): static
+    {
+        $data = json_decode((string) $response->getBody(), true);
+
+        return static::fromArray($data);
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            firstName: $data['firstName'] ?? null,
+            middleName: $data['middleName'] ?? null,
+            lastName: $data['lastName'] ?? null,
+            legalName: $data['legalName'] ?? null,
+            gender: isset($data['gender']) ? Gender::tryFrom($data['gender']) : null,
+            dob: isset($data['dob']) ? new \DateTimeImmutable($data['dob']) : null,
+            placeOfBirth: $data['placeOfBirth'] ?? null,
+            countryOfBirth: $data['countryOfBirth'] ?? null,
+            stateOfBirth: $data['stateOfBirth'] ?? null,
+            country: $data['country'] ?? null,
+            nationality: $data['nationality'] ?? null,
+            addresses: isset($data['addresses']) && is_array($data['addresses']) ? array_map(fn (array $address) => ComplexAddress::fromArray($address), $data['addresses'])
+                : null,
+            tin: $data['tin'] ?? null,
+        );
     }
 }

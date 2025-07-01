@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SumsubApi\DTO\Entities\Parts;
+namespace SumsubApi\DTO\Parts;
 
 use SumsubApi\DTO\BaseEntityPart;
 use SumsubApi\Enums\CheckType;

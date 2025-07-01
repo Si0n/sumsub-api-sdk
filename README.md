@@ -38,11 +38,7 @@ composer require sumsub/php-sdk
 ## Basic Usage
 
 ```php
-use SumsubApi\ApiClient;
-use SumsubApi\Configuration;
-use SumsubApi\DTO\Requests\CreateApplicant;
-use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo;
-use SumsubApi\DTO\Entities\Applicant;
+use SumsubApi\ApiClient;use SumsubApi\Configuration;use SumsubApi\DTO\Parts\ApplicantFixedInfo;use SumsubApi\DTO\Requests\CreateApplicant;
 
 // Initialize configuration
 $config = new Configuration(

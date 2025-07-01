@@ -6,7 +6,7 @@ namespace SumsubApi\DTO\Requests;
 
 use GuzzleHttp\RequestOptions;
 use SumsubApi\DTO\BaseRequest;
-use SumsubApi\DTO\Requests\Parts\PaymentSource;
+use SumsubApi\DTO\Parts\PaymentSource;
 
 readonly class CreateApplicantAction implements BaseRequest
 {

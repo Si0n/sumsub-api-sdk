@@ -6,8 +6,8 @@ namespace SumsubApi\DTO\Entities;
 
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
-use SumsubApi\DTO\Entities\Parts\Check;
-use SumsubApi\DTO\Entities\Parts\PaymentSource;
+use SumsubApi\DTO\Parts\ApplicationPaymentSource;
+use SumsubApi\DTO\Parts\Check;
 
 class ApplicantAction implements BaseEntity
 {
@@ -21,7 +21,7 @@ class ApplicantAction implements BaseEntity
         public ?ApplicationReviewStatus $review = null,
         public ?array $requiredIdDocs = null,
         public ?array $checks = null,
-        public ?PaymentSource $paymentSource = null,
+        public ?ApplicationPaymentSource $paymentSource = null,
         public array $rawData = [],
     ) {
     }
@@ -43,7 +43,7 @@ class ApplicantAction implements BaseEntity
             review: isset($data['review']) ? ApplicationReviewStatus::fromArray($data['review']) : null,
             requiredIdDocs: $data['requiredIdDocs'] ?? null,
             checks: isset($data['checks']) ? array_map(Check::fromArray(...), $data['checks']) : null,
-            paymentSource: isset($data['paymentSource']) ? PaymentSource::fromArray($data['paymentSource']) : null,
+            paymentSource: isset($data['paymentSource']) ? ApplicationPaymentSource::fromArray($data['paymentSource']) : null,
             rawData: $data,
         );
     }
