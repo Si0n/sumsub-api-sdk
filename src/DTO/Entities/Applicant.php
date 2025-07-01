@@ -83,4 +83,35 @@ class Applicant implements BaseEntity, BaseEntityPart
             rawData: $data,
         );
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'createdAt' => $this->createdAt?->format(\DateTimeInterface::RFC3339),
+            'clientId' => $this->clientId,
+            'inspectionId' => $this->inspectionId,
+            'externalUserId' => $this->externalUserId,
+            'sourceKey' => $this->sourceKey,
+            'info' => $this->info,
+            'fixedInfo' => $this->fixedInfo,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'applicantPlatform' => $this->applicantPlatform,
+            'ipCountry' => $this->ipCountry,
+            'authCode' => $this->authCode,
+            'agreement' => $this->agreement,
+            'requiredIdDocs' => $this->requiredIdDocs,
+            'review' => $this->review,
+            'lang' => $this->lang,
+            'metadata' => $this->metadata,
+            'type' => $this->type?->value,
+            'riskLabels' => $this->riskLabels,
+            'questionnaires' => $this->questionnaires,
+            'notes' => $this->notes,
+            'tags' => $this->tags,
+            'memberOf' => $this->memberOf,
+            'rawData' => $this->rawData,
+        ];
+    }
 }
