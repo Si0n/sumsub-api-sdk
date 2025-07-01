@@ -95,7 +95,7 @@ class Applicant implements BaseEntity, BaseEntityPart
             'externalUserId' => $this->externalUserId,
             'sourceKey' => $this->sourceKey,
             'info' => $this->info,
-            'fixedInfo' => $this->fixedInfo,
+            'fixedInfo' => $this->fixedInfo?->toArray(),
             'email' => $this->email,
             'phone' => $this->phone,
             'applicantPlatform' => $this->applicantPlatform,
