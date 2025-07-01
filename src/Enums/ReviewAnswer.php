@@ -8,4 +8,9 @@ enum ReviewAnswer: string
 {
     case GREEN = 'GREEN';
     case RED = 'RED';
+
+    public function isOk(): bool
+    {
+        return $this === self::GREEN;
+    }
 }
