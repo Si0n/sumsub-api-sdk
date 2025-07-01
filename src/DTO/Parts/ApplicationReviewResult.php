@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace SumsubApi\DTO\Parts;
 
 use SumsubApi\DTO\BaseEntityPart;
+use SumsubApi\DTO\BaseRequestPart;
 
-class ApplicationReviewResult implements BaseEntityPart
+class ApplicationReviewResult implements BaseEntityPart, BaseRequestPart
 {
     public function __construct(
         public ?string $moderationComment = null,
@@ -33,5 +34,17 @@ class ApplicationReviewResult implements BaseEntityPart
             buttonIds: $data['buttonIds'] ?? null,
             rawData: $data,
         );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'moderationComment' => $this->moderationComment,
+            'clientComment' => $this->clientComment,
+            'reviewAnswer' => $this->reviewAnswer,
+            'rejectLabels' => $this->rejectLabels,
+            'reviewRejectType' => $this->reviewRejectType,
+            'buttonIds' => $this->buttonIds,
+        ];
     }
 }

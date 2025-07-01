@@ -35,7 +35,6 @@ class ApplicationPaymentSource implements BaseEntityPart
             'id' => $this->id,
             'createdAt' => $this->createdAt?->format(\DateTimeInterface::RFC3339),
             'fixedInfo' => $this->fixedInfo?->toArray() ?? [],
-            'rawData' => $this->rawData,
         ];
     }
 }

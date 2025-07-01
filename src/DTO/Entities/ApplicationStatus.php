@@ -6,10 +6,12 @@ namespace SumsubApi\DTO\Entities;
 
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
+use SumsubApi\DTO\BaseEntityPart;
+use SumsubApi\DTO\BaseRequestPart;
 use SumsubApi\DTO\Parts\ApplicationReviewResult;
 use SumsubApi\Enums\ReviewStatus;
 
-class ApplicationStatus implements BaseEntity
+class ApplicationStatus implements BaseEntity, BaseEntityPart, BaseRequestPart
 {
     public function __construct(
         public ?string $reviewId = null,
@@ -33,6 +35,14 @@ class ApplicationStatus implements BaseEntity
     {
         $data = json_decode((string) $response->getBody(), true) ?? [];
 
+        return static::fromArray($data);
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function fromArray(array $data): static
+    {
         return new static(
             reviewId: $data['reviewId'] ?? null,
             attemptId: $data['attemptId'] ?? null,
@@ -45,5 +55,21 @@ class ApplicationStatus implements BaseEntity
             reviewStatus: isset($data['reviewStatus']) ? ReviewStatus::tryFrom($data['reviewStatus']) : null,
             rawData: $data,
         );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'reviewId' => $this->reviewId,
+            'attemptId' => $this->attemptId,
+            'attemptCnt' => $this->attemptCnt,
+            'elapsedSincePendingMs' => $this->elapsedSincePendingMs,
+            'levelName' => $this->levelName,
+            'createDate' => $this->createDate?->format(\DateTimeInterface::RFC3339),
+            'reviewDate' => $this->reviewDate?->format(\DateTimeInterface::RFC3339),
+            'reviewResult' => $this->reviewResult?->toArray() ?? [],
+            'reviewStatus' => $this->reviewStatus?->value,
+            'priority' => $this->priority,
+        ];
     }
 }
