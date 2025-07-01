@@ -146,4 +146,15 @@ enum RejectionLabel: string
     {
         return str_starts_with($this->value, 'TEMPORARY_');
     }
+
+    public function getLabelDescription(): ?string
+    {
+        $constant = sprintf('%s::TEXT_%s', self::class, $this->name);
+
+        if (\defined($constant)) {
+            return \constant($constant);
+        }
+
+        return $this->name;
+    }
 }
