@@ -7,6 +7,7 @@ namespace SumsubApi\DTO\Entities;
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
 use SumsubApi\DTO\BaseEntityPart;
+use SumsubApi\DTO\Entities\Parts\ApplicantFixedInfo;
 use SumsubApi\Enums\CompanyType;
 
 class Applicant implements BaseEntity, BaseEntityPart
@@ -19,7 +20,7 @@ class Applicant implements BaseEntity, BaseEntityPart
         public ?string $externalUserId = null,
         public ?string $sourceKey = null,
         public ?array $info = null,
-        public ?array $fixedInfo = null,
+        public ?ApplicantFixedInfo $fixedInfo = null,
         public ?string $email = null,
         public ?string $phone = null,
         public ?string $applicantPlatform = null,
@@ -63,7 +64,7 @@ class Applicant implements BaseEntity, BaseEntityPart
             externalUserId: $data['externalUserId'] ?? null,
             sourceKey: $data['sourceKey'] ?? null,
             info: $data['info'] ?? null,
-            fixedInfo: $data['fixedInfo'] ?? null,
+            fixedInfo: !empty($data['fixedInfo']) && is_array($data['fixedInfo']) ? ApplicantFixedInfo::fromArray($data['fixedInfo']) : null,
             email: $data['email'] ?? null,
             phone: $data['phone'] ?? null,
             applicantPlatform: $data['applicantPlatform'] ?? null,
@@ -111,7 +112,6 @@ class Applicant implements BaseEntity, BaseEntityPart
             'notes' => $this->notes,
             'tags' => $this->tags,
             'memberOf' => $this->memberOf,
-            'rawData' => $this->rawData,
         ];
     }
 }

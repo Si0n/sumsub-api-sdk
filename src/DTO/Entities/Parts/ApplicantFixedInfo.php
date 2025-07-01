@@ -6,10 +6,11 @@ namespace SumsubApi\DTO\Entities\Parts;
 
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
+use SumsubApi\DTO\BaseEntityPart;
 use SumsubApi\DTO\Requests\Parts\ApplicantFixedInfo as RequestApplicantFixedInfo;
 use SumsubApi\Enums\Gender;
 
-readonly class ApplicantFixedInfo extends RequestApplicantFixedInfo implements BaseEntity
+readonly class ApplicantFixedInfo extends RequestApplicantFixedInfo implements BaseEntity, BaseEntityPart
 {
     /**
      * @throws \DateMalformedStringException
@@ -18,6 +19,14 @@ readonly class ApplicantFixedInfo extends RequestApplicantFixedInfo implements B
     {
         $data = json_decode((string) $response->getBody(), true);
 
+        return static::fromArray($data);
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function fromArray(array $data): static
+    {
         return new static(
             firstName: $data['firstName'] ?? null,
             middleName: $data['middleName'] ?? null,
