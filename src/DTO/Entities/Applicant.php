@@ -6,9 +6,10 @@ namespace SumsubApi\DTO\Entities;
 
 use GuzzleHttp\Psr7\Response;
 use SumsubApi\DTO\BaseEntity;
+use SumsubApi\DTO\BaseEntityPart;
 use SumsubApi\Enums\CompanyType;
 
-class Applicant implements BaseEntity
+class Applicant implements BaseEntity, BaseEntityPart
 {
     public function __construct(
         public ?string $id = null,
@@ -46,6 +47,14 @@ class Applicant implements BaseEntity
     {
         $data = json_decode((string) $response->getBody(), true) ?? [];
 
+        return static::fromArray($data);
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function fromArray(array $data): static
+    {
         return new static(
             id: $data['id'] ?? null,
             createdAt: isset($data['createdAt']) ? new \DateTimeImmutable($data['createdAt']) : null,
