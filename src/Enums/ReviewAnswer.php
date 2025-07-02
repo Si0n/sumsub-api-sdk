@@ -11,6 +11,6 @@ enum ReviewAnswer: string
 
     public function isOk(): bool
     {
-        return $this === self::GREEN;
+        return self::GREEN === $this;
     }
 }
