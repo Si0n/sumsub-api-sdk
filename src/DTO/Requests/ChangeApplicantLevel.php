@@ -19,7 +19,7 @@ readonly class ChangeApplicantLevel implements BaseRequest
     {
         return [
             RequestOptions::QUERY => [
-                'levelName' => $this->levelName,
+                'name' => $this->levelName,
             ],
         ];
     }
