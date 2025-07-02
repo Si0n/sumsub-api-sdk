@@ -21,6 +21,7 @@ use SumsubApi\DTO\Entities\ExternalWebSDKLink;
 use SumsubApi\DTO\Parts\ApplicantFixedInfo;
 use SumsubApi\DTO\Entities\RejectionReason;
 use SumsubApi\DTO\Requests\ChangeApplicantFixedInfo;
+use SumsubApi\DTO\Requests\ChangeApplicantLevel;
 use SumsubApi\DTO\Requests\CreateApplicant;
 use SumsubApi\DTO\Requests\CreateApplicantAction;
 use SumsubApi\DTO\Requests\GenerateExternalWebSDKLink;
@@ -33,6 +34,7 @@ class ApiClient
     private const string PATH_APPLICANTS = 'resources/applicants';
     private const string PATH_CHANGE_APPLICANT_FIXED_INFO = 'resources/applicants/%s/fixedInfo';
     private const string PATH_CREATE_APPLICANT_ACTION = 'resources/applicantActions/-/forApplicant/%s';
+    private const string PATH_CHANGE_LEVEL_APPLICANT = 'resources/applicants/%s/moveToLevel';
     private const string PATH_REQUEST_ACTION_CHECK = 'resources/applicantActions/%s/review/status/pending';
     private const string PATH_ACCESS_TOKENS = 'resources/accessTokens/sdk';
     private const string PATH_APPLICANT_STATUS = 'resources/applicants/%s/status';
@@ -62,6 +64,17 @@ class ApiClient
     public function createApplicant(CreateApplicant $request): Applicant
     {
         $response = $this->getApiClient()->post(static::PATH_APPLICANTS, $request->toGuzzleOptions());
+
+        return Applicant::fromResponse($response);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws \DateMalformedStringException
+     */
+    public function changeApplicantLevel(ChangeApplicantLevel $request): Applicant
+    {
+        $response = $this->getApiClient()->post(sprintf(static::PATH_CHANGE_LEVEL_APPLICANT, $request->applicantId), $request->toGuzzleOptions());
 
         return Applicant::fromResponse($response);
     }
